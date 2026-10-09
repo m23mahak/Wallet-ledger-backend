@@ -128,6 +128,17 @@ app.include_router(transaction_routes.router, prefix=API_V1_PREFIX)
 app.include_router(admin_routes.router, prefix=API_V1_PREFIX)
 
 
+@app.get("/", tags=["General"], summary="API Root")
+async def root():
+    return {
+        "name": settings.app_name,
+        "status": "online",
+        "docs": "/docs",
+        "health": "/health",
+        "api_v1": API_V1_PREFIX,
+    }
+
+
 @app.get("/health", tags=["Health"], summary="Liveness check")
 async def health():
     return {"status": "ok"}
