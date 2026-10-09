@@ -103,9 +103,16 @@ app = FastAPI(
 )
 
 app.add_middleware(LoggingMiddleware)
+
+# Default CORS origins fallback if none provided
+configured_origins = settings.cors_origin_list
+if not configured_origins:
+    configured_origins = ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:5173"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origin_list,
+    allow_origins=configured_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
